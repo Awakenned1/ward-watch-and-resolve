@@ -24,6 +24,7 @@ export type Database = {
           details: string
           full_name: string
           id: string
+          logged_at: string
           owner_id: string
           photo_path: string | null
           status: Database["public"]["Enums"]["ward109_case_status"]
@@ -40,6 +41,7 @@ export type Database = {
           details: string
           full_name: string
           id?: string
+          logged_at?: string
           owner_id: string
           photo_path?: string | null
           status?: Database["public"]["Enums"]["ward109_case_status"]
@@ -56,6 +58,7 @@ export type Database = {
           details?: string
           full_name?: string
           id?: string
+          logged_at?: string
           owner_id?: string
           photo_path?: string | null
           status?: Database["public"]["Enums"]["ward109_case_status"]
