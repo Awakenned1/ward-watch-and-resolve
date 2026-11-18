@@ -14,16 +14,128 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ward109_fault_reports: {
+        Row: {
+          address: string
+          category: string
+          city_reference_number: string
+          contact_number: string
+          created_at: string
+          details: string
+          full_name: string
+          id: string
+          owner_id: string
+          photo_path: string | null
+          status: Database["public"]["Enums"]["ward109_case_status"]
+          tracking_code: string
+          updated_at: string
+          ward_number: number
+        }
+        Insert: {
+          address: string
+          category: string
+          city_reference_number: string
+          contact_number: string
+          created_at?: string
+          details: string
+          full_name: string
+          id?: string
+          owner_id: string
+          photo_path?: string | null
+          status?: Database["public"]["Enums"]["ward109_case_status"]
+          tracking_code: string
+          updated_at?: string
+          ward_number?: number
+        }
+        Update: {
+          address?: string
+          category?: string
+          city_reference_number?: string
+          contact_number?: string
+          created_at?: string
+          details?: string
+          full_name?: string
+          id?: string
+          owner_id?: string
+          photo_path?: string | null
+          status?: Database["public"]["Enums"]["ward109_case_status"]
+          tracking_code?: string
+          updated_at?: string
+          ward_number?: number
+        }
+        Relationships: []
+      }
+      ward109_fault_updates: {
+        Row: {
+          author_id: string
+          created_at: string
+          fault_id: string
+          id: string
+          note: string
+          status: Database["public"]["Enums"]["ward109_case_status"]
+        }
+        Insert: {
+          author_id: string
+          created_at?: string
+          fault_id: string
+          id?: string
+          note: string
+          status: Database["public"]["Enums"]["ward109_case_status"]
+        }
+        Update: {
+          author_id?: string
+          created_at?: string
+          fault_id?: string
+          id?: string
+          note?: string
+          status?: Database["public"]["Enums"]["ward109_case_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ward109_fault_updates_fault_id_fkey"
+            columns: ["fault_id"]
+            isOneToOne: false
+            referencedRelation: "ward109_fault_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ward109_staff_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["ward109_staff_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["ward109_staff_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["ward109_staff_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_ward109_staff: { Args: never; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      ward109_case_status:
+        | "new"
+        | "logged_with_city"
+        | "in_progress"
+        | "escalated"
+        | "resolved"
+      ward109_staff_role: "ward_staff"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +262,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      ward109_case_status: [
+        "new",
+        "logged_with_city",
+        "in_progress",
+        "escalated",
+        "resolved",
+      ],
+      ward109_staff_role: ["ward_staff"],
+    },
   },
 } as const

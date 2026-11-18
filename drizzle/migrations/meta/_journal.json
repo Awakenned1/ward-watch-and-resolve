@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794986134757,
+      "tag": "0000_ward109_fault_reports",
+      "breakpoints": true
+    }
+  ]
 }
