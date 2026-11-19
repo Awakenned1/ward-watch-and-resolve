@@ -34,3 +34,4 @@ use the editor.
 - Keep report access private through database row rules; only report owners and the verified Ward 109 staff role can view resident records, because reports contain personal contact and address details.
 - Grant the Ward 109 staff role only through trusted verified-email provisioning, never resident-editable metadata or client-side checks.
 - Store optional fault photos in private storage and issue temporary links only after an authenticated access check, because residents' locations may be identifiable.
+- Use the generated browser client for resident report screens and rely on the database's owner/staff rules for every read and write, because route visibility alone cannot protect direct data access.

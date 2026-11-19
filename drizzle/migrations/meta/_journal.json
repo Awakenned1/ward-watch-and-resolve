@@ -22,6 +22,27 @@
       "when": 1794986556803,
       "tag": "0002_ward109_staff_email_access",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795071029042,
+      "tag": "0003_secure_ward109_photo_attachment",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795071111591,
+      "tag": "0004_harden_ward109_report_privacy",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795071244739,
+      "tag": "0005_ward109_report_tracking_default",
+      "breakpoints": true
     }
   ]
 }

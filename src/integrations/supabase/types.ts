@@ -45,7 +45,7 @@ export type Database = {
           owner_id: string
           photo_path?: string | null
           status?: Database["public"]["Enums"]["ward109_case_status"]
-          tracking_code: string
+          tracking_code?: string
           updated_at?: string
           ward_number?: number
         }
