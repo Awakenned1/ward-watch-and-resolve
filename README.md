@@ -1,31 +1,31 @@
 # Ward Watch And Resolve
 
-Hello 👋 
+Hello 👋
 
-To resolve any issue, please log it directly with the respective City entities; faults not logged first cannot be tracked or resolved. 
+To resolve any issue, please log it directly with the respective City entities; faults not logged first cannot be tracked or resolved.
 
 Log your issue online:
-💦 *Joburg Water* – https://jwfaultlogging.jwater.co.za 
+💦 _Joburg Water_ – https://jwfaultlogging.jwater.co.za
 
-💡 *City Power* – https://citypower.mobi
+💡 _City Power_ – https://citypower.mobi
 
-🛣 *JRA (roads | potholes | kerb | stormwater)* – hotline@jra.org.za
+🛣 _JRA (roads | potholes | kerb | stormwater)_ – hotline@jra.org.za
 
-🍃 *City Parks* – joburgconnect@joburg.org.za
+🍃 _City Parks_ – joburgconnect@joburg.org.za
 
-🗑 *Pikitup (refuse)* – info@pikitup.co.za
+🗑 _Pikitup (refuse)_ – info@pikitup.co.za
 
-🚔 *JMPD* – 011 375 5911
+🚔 _JMPD_ – 011 375 5911
 
-🧾 *Revenue & Billing* – regionErevenue@joburg.org.za
+🧾 _Revenue & Billing_ – regionErevenue@joburg.org.za
 
-📊 *E-Joburg* – https://www.e-joburg.org.za
+📊 _E-Joburg_ – https://www.e-joburg.org.za
 
-📱 *CoJ Central App* – Log & track everything in one place:
+📱 _CoJ Central App_ – Log & track everything in one place:
 • Android – https://bit.ly/4ucfYc4
 • iPhone – https://bit.ly/42WsUH4
 
-👉 Unresolved? Escalate to me 
+👉 Unresolved? Escalate to me
 Full Name:
 Contact Number:
 Address:
@@ -36,29 +36,58 @@ Details:
 
 *A picture if necessary
 
-Regards, 
+Regards,
 Charlene Olivia McCord
 Councillor Ward 109 | City of Johannesburg create a system to track for DA Political party. i want a fault login system, they should be able to upload faults , a system where people can login and report faults around the area where DA is in charge
 
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://ward-watch-and-resolve.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/4d4e35d4-f24f-48f5-8aba-bdf9a1c463e4).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+The app runs independently with TanStack Start, React, Tailwind CSS, and Supabase.
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Use Node.js 22.12 or newer and Bun (the dependency lockfile is `bun.lock`).
+Copy `.env.example` to `.env.local` and configure your own Supabase project URL
+and publishable key. An existing `.env.local` can be kept as-is.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+bun install --frozen-lockfile
+bun run dev
 ```
+
+Account sessions stay in the browser and requests go directly to Supabase.
+Never put a database password, service role key, or secret API key in a `VITE_` variable.
+Keep `SUPABASE_SECRET_KEY` in the ignored `.env.local` file or server deployment secrets.
+`SUPABASE_JWKS_URL` identifies the project's public token-verification keys.
+Database row rules protect resident records, and evidence files use private storage.
+
+## Database setup
+
+The Ward 109 schema and reference data are in `db/migrations/`. Set `DATABASE_URL`
+in the process environment to the Supabase Session pooler connection string,
+then inspect and apply pending migrations:
+
+```sh
+node db/migrate.mjs --dry-run
+node db/migrate.mjs
+```
+
+The Supabase API secret key cannot replace `DATABASE_URL` for schema migrations.
+The older `drizzle/migrations/` directory is retained as historical migration records;
+it is not the active migration workflow.
+
+For a new empty project, `db/setup-all.sql` is also available for the Supabase SQL
+Editor. Inspect an existing database before applying it: it creates the full schema.
+Email signup must be enabled in Supabase Auth. Keep email confirmation enabled and
+allow the deployed app's `/auth` and `/reset-password` URLs in Auth redirect settings.
+Staff access is provisioned only for trusted verified email addresses.
+
+## Validation and production
+
+```sh
+bun run test
+bun run build
+node .output/server/index.mjs
+```
+
+The production build includes a standalone Node server in `.output/server` and
+static assets in `.output/public`. Supply the two `VITE_SUPABASE_*` variables at
+build time for the deployment's Supabase project.

@@ -10,33 +10,224 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ReportRouteImport } from './routes/report'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as StaffRouteImport } from './routes/staff'
+import { Route as UpdatesRouteImport } from './routes/updates'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminComplaintsRouteImport } from './routes/admin/complaints'
+import { Route as AdminMapRouteImport } from './routes/admin/map'
+import { Route as AdminResidentsRouteImport } from './routes/admin/residents'
+import { Route as AdminTeamRouteImport } from './routes/admin/team'
+import { Route as AdminUpdatesRouteImport } from './routes/admin/updates'
+import { Route as ReportsIndexRouteImport } from './routes/reports/index'
+import { Route as ReportsIdRouteImport } from './routes/reports/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffRoute = StaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UpdatesRoute = UpdatesRouteImport.update({
+  id: '/updates',
+  path: '/updates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminComplaintsRoute = AdminComplaintsRouteImport.update({
+  id: '/complaints',
+  path: '/complaints',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMapRoute = AdminMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminResidentsRoute = AdminResidentsRouteImport.update({
+  id: '/residents',
+  path: '/residents',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTeamRoute = AdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUpdatesRoute = AdminUpdatesRouteImport.update({
+  id: '/updates',
+  path: '/updates',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsIdRoute = ReportsIdRouteImport.update({
+  id: '/reports/$id',
+  path: '/reports/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
+  '/report': typeof ReportRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/staff': typeof StaffRoute
+  '/updates': typeof UpdatesRoute
+  '/admin/complaints': typeof AdminComplaintsRoute
+  '/admin/map': typeof AdminMapRoute
+  '/admin/residents': typeof AdminResidentsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/updates': typeof AdminUpdatesRoute
+  '/reports/$id': typeof ReportsIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
+  '/report': typeof ReportRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/staff': typeof StaffRoute
+  '/updates': typeof UpdatesRoute
+  '/admin/complaints': typeof AdminComplaintsRoute
+  '/admin/map': typeof AdminMapRoute
+  '/admin/residents': typeof AdminResidentsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/updates': typeof AdminUpdatesRoute
+  '/reports/$id': typeof ReportsIdRoute
+  '/admin': typeof AdminIndexRoute
+  '/reports': typeof ReportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
+  '/report': typeof ReportRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/staff': typeof StaffRoute
+  '/updates': typeof UpdatesRoute
+  '/admin/complaints': typeof AdminComplaintsRoute
+  '/admin/map': typeof AdminMapRoute
+  '/admin/residents': typeof AdminResidentsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/updates': typeof AdminUpdatesRoute
+  '/reports/$id': typeof ReportsIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/privacy'
+    | '/report'
+    | '/reset-password'
+    | '/staff'
+    | '/updates'
+    | '/admin/complaints'
+    | '/admin/map'
+    | '/admin/residents'
+    | '/admin/team'
+    | '/admin/updates'
+    | '/reports/$id'
+    | '/admin/'
+    | '/reports/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/privacy'
+    | '/report'
+    | '/reset-password'
+    | '/staff'
+    | '/updates'
+    | '/admin/complaints'
+    | '/admin/map'
+    | '/admin/residents'
+    | '/admin/team'
+    | '/admin/updates'
+    | '/reports/$id'
+    | '/admin'
+    | '/reports'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/auth'
+    | '/privacy'
+    | '/report'
+    | '/reset-password'
+    | '/staff'
+    | '/updates'
+    | '/admin/complaints'
+    | '/admin/map'
+    | '/admin/residents'
+    | '/admin/team'
+    | '/admin/updates'
+    | '/reports/$id'
+    | '/admin/'
+    | '/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ReportRoute: typeof ReportRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  StaffRoute: typeof StaffRoute
+  UpdatesRoute: typeof UpdatesRoute
+  ReportsIdRoute: typeof ReportsIdRoute
+  ReportsIndexRoute: typeof ReportsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +239,145 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff': {
+      id: '/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof StaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/updates': {
+      id: '/updates'
+      path: '/updates'
+      fullPath: '/updates'
+      preLoaderRoute: typeof UpdatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/complaints': {
+      id: '/admin/complaints'
+      path: '/complaints'
+      fullPath: '/admin/complaints'
+      preLoaderRoute: typeof AdminComplaintsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/map': {
+      id: '/admin/map'
+      path: '/map'
+      fullPath: '/admin/map'
+      preLoaderRoute: typeof AdminMapRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/residents': {
+      id: '/admin/residents'
+      path: '/residents'
+      fullPath: '/admin/residents'
+      preLoaderRoute: typeof AdminResidentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/team': {
+      id: '/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AdminTeamRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/updates': {
+      id: '/admin/updates'
+      path: '/updates'
+      fullPath: '/admin/updates'
+      preLoaderRoute: typeof AdminUpdatesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/reports/': {
+      id: '/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/$id': {
+      id: '/reports/$id'
+      path: '/reports/$id'
+      fullPath: '/reports/$id'
+      preLoaderRoute: typeof ReportsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminComplaintsRoute: typeof AdminComplaintsRoute
+  AdminMapRoute: typeof AdminMapRoute
+  AdminResidentsRoute: typeof AdminResidentsRoute
+  AdminTeamRoute: typeof AdminTeamRoute
+  AdminUpdatesRoute: typeof AdminUpdatesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminComplaintsRoute: AdminComplaintsRoute,
+  AdminMapRoute: AdminMapRoute,
+  AdminResidentsRoute: AdminResidentsRoute,
+  AdminTeamRoute: AdminTeamRoute,
+  AdminUpdatesRoute: AdminUpdatesRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AuthRoute: AuthRoute,
+  PrivacyRoute: PrivacyRoute,
+  ReportRoute: ReportRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  StaffRoute: StaffRoute,
+  UpdatesRoute: UpdatesRoute,
+  ReportsIdRoute: ReportsIdRoute,
+  ReportsIndexRoute: ReportsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

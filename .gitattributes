@@ -1,0 +1,7 @@
+# Keep LF in every checkout (including Windows) so Prettier/ESLint agree with the repo.
+* text=auto eol=lf
+
+*.ico binary
+*.jpg binary
+*.png binary
+*.webp binary
