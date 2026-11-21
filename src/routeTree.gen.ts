@@ -11,18 +11,29 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ApproachRouteImport } from './routes/approach'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as CompanyRouteImport } from './routes/company'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as EquipmentRouteImport } from './routes/equipment'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ServicesRouteImport } from './routes/services'
 import { Route as StaffRouteImport } from './routes/staff'
 import { Route as UpdatesRouteImport } from './routes/updates'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminCommunityRouteImport } from './routes/admin/community'
 import { Route as AdminComplaintsRouteImport } from './routes/admin/complaints'
 import { Route as AdminMapRouteImport } from './routes/admin/map'
 import { Route as AdminResidentsRouteImport } from './routes/admin/residents'
 import { Route as AdminTeamRouteImport } from './routes/admin/team'
 import { Route as AdminUpdatesRouteImport } from './routes/admin/updates'
+import { Route as CommunityIndexRouteImport } from './routes/community/index'
+import { Route as CommunityIdRouteImport } from './routes/community/$id'
 import { Route as ReportsIndexRouteImport } from './routes/reports/index'
 import { Route as ReportsIdRouteImport } from './routes/reports/$id'
 
@@ -36,9 +47,44 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApproachRoute = ApproachRouteImport.update({
+  id: '/approach',
+  path: '/approach',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanyRoute = CompanyRouteImport.update({
+  id: '/company',
+  path: '/company',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EquipmentRoute = EquipmentRouteImport.update({
+  id: '/equipment',
+  path: '/equipment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -56,6 +102,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -69,6 +120,11 @@ const UpdatesRoute = UpdatesRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCommunityRoute = AdminCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminComplaintsRoute = AdminComplaintsRouteImport.update({
@@ -96,6 +152,16 @@ const AdminUpdatesRoute = AdminUpdatesRouteImport.update({
   path: '/updates',
   getParentRoute: () => AdminRoute,
 } as any)
+const CommunityIndexRoute = CommunityIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CommunityRoute,
+} as any)
+const CommunityIdRoute = CommunityIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => CommunityRoute,
+} as any)
 const ReportsIndexRoute = ReportsIndexRouteImport.update({
   id: '/reports/',
   path: '/reports/',
@@ -110,55 +176,87 @@ const ReportsIdRoute = ReportsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/approach': typeof ApproachRoute
   '/auth': typeof AuthRoute
+  '/community': typeof CommunityRouteWithChildren
+  '/company': typeof CompanyRoute
+  '/contact': typeof ContactRoute
+  '/equipment': typeof EquipmentRoute
+  '/news': typeof NewsRoute
+  '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/services': typeof ServicesRoute
   '/staff': typeof StaffRoute
   '/updates': typeof UpdatesRoute
+  '/admin/community': typeof AdminCommunityRoute
   '/admin/complaints': typeof AdminComplaintsRoute
   '/admin/map': typeof AdminMapRoute
   '/admin/residents': typeof AdminResidentsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/updates': typeof AdminUpdatesRoute
+  '/community/$id': typeof CommunityIdRoute
   '/reports/$id': typeof ReportsIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/community/': typeof CommunityIndexRoute
   '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/approach': typeof ApproachRoute
   '/auth': typeof AuthRoute
+  '/company': typeof CompanyRoute
+  '/contact': typeof ContactRoute
+  '/equipment': typeof EquipmentRoute
+  '/news': typeof NewsRoute
+  '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/services': typeof ServicesRoute
   '/staff': typeof StaffRoute
   '/updates': typeof UpdatesRoute
+  '/admin/community': typeof AdminCommunityRoute
   '/admin/complaints': typeof AdminComplaintsRoute
   '/admin/map': typeof AdminMapRoute
   '/admin/residents': typeof AdminResidentsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/updates': typeof AdminUpdatesRoute
+  '/community/$id': typeof CommunityIdRoute
   '/reports/$id': typeof ReportsIdRoute
   '/admin': typeof AdminIndexRoute
+  '/community': typeof CommunityIndexRoute
   '/reports': typeof ReportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/approach': typeof ApproachRoute
   '/auth': typeof AuthRoute
+  '/community': typeof CommunityRouteWithChildren
+  '/company': typeof CompanyRoute
+  '/contact': typeof ContactRoute
+  '/equipment': typeof EquipmentRoute
+  '/news': typeof NewsRoute
+  '/notifications': typeof NotificationsRoute
   '/privacy': typeof PrivacyRoute
   '/report': typeof ReportRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/services': typeof ServicesRoute
   '/staff': typeof StaffRoute
   '/updates': typeof UpdatesRoute
+  '/admin/community': typeof AdminCommunityRoute
   '/admin/complaints': typeof AdminComplaintsRoute
   '/admin/map': typeof AdminMapRoute
   '/admin/residents': typeof AdminResidentsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/updates': typeof AdminUpdatesRoute
+  '/community/$id': typeof CommunityIdRoute
   '/reports/$id': typeof ReportsIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/community/': typeof CommunityIndexRoute
   '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRouteTypes {
@@ -166,64 +264,104 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/approach'
     | '/auth'
+    | '/community'
+    | '/company'
+    | '/contact'
+    | '/equipment'
+    | '/news'
+    | '/notifications'
     | '/privacy'
     | '/report'
     | '/reset-password'
+    | '/services'
     | '/staff'
     | '/updates'
+    | '/admin/community'
     | '/admin/complaints'
     | '/admin/map'
     | '/admin/residents'
     | '/admin/team'
     | '/admin/updates'
+    | '/community/$id'
     | '/reports/$id'
     | '/admin/'
+    | '/community/'
     | '/reports/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/approach'
     | '/auth'
+    | '/company'
+    | '/contact'
+    | '/equipment'
+    | '/news'
+    | '/notifications'
     | '/privacy'
     | '/report'
     | '/reset-password'
+    | '/services'
     | '/staff'
     | '/updates'
+    | '/admin/community'
     | '/admin/complaints'
     | '/admin/map'
     | '/admin/residents'
     | '/admin/team'
     | '/admin/updates'
+    | '/community/$id'
     | '/reports/$id'
     | '/admin'
+    | '/community'
     | '/reports'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/approach'
     | '/auth'
+    | '/community'
+    | '/company'
+    | '/contact'
+    | '/equipment'
+    | '/news'
+    | '/notifications'
     | '/privacy'
     | '/report'
     | '/reset-password'
+    | '/services'
     | '/staff'
     | '/updates'
+    | '/admin/community'
     | '/admin/complaints'
     | '/admin/map'
     | '/admin/residents'
     | '/admin/team'
     | '/admin/updates'
+    | '/community/$id'
     | '/reports/$id'
     | '/admin/'
+    | '/community/'
     | '/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  ApproachRoute: typeof ApproachRoute
   AuthRoute: typeof AuthRoute
+  CommunityRoute: typeof CommunityRouteWithChildren
+  CompanyRoute: typeof CompanyRoute
+  ContactRoute: typeof ContactRoute
+  EquipmentRoute: typeof EquipmentRoute
+  NewsRoute: typeof NewsRoute
+  NotificationsRoute: typeof NotificationsRoute
   PrivacyRoute: typeof PrivacyRoute
   ReportRoute: typeof ReportRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ServicesRoute: typeof ServicesRoute
   StaffRoute: typeof StaffRoute
   UpdatesRoute: typeof UpdatesRoute
   ReportsIdRoute: typeof ReportsIdRoute
@@ -246,11 +384,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/approach': {
+      id: '/approach'
+      path: '/approach'
+      fullPath: '/approach'
+      preLoaderRoute: typeof ApproachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company': {
+      id: '/company'
+      path: '/company'
+      fullPath: '/company'
+      preLoaderRoute: typeof CompanyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/equipment': {
+      id: '/equipment'
+      path: '/equipment'
+      fullPath: '/equipment'
+      preLoaderRoute: typeof EquipmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -274,6 +461,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff': {
       id: '/staff'
       path: '/staff'
@@ -293,6 +487,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/community': {
+      id: '/admin/community'
+      path: '/community'
+      fullPath: '/admin/community'
+      preLoaderRoute: typeof AdminCommunityRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/complaints': {
@@ -330,6 +531,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUpdatesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/community/': {
+      id: '/community/'
+      path: '/'
+      fullPath: '/community/'
+      preLoaderRoute: typeof CommunityIndexRouteImport
+      parentRoute: typeof CommunityRoute
+    }
+    '/community/$id': {
+      id: '/community/$id'
+      path: '/$id'
+      fullPath: '/community/$id'
+      preLoaderRoute: typeof CommunityIdRouteImport
+      parentRoute: typeof CommunityRoute
+    }
     '/reports/': {
       id: '/reports/'
       path: '/reports'
@@ -348,6 +563,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminCommunityRoute: typeof AdminCommunityRoute
   AdminComplaintsRoute: typeof AdminComplaintsRoute
   AdminMapRoute: typeof AdminMapRoute
   AdminResidentsRoute: typeof AdminResidentsRoute
@@ -357,6 +573,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCommunityRoute: AdminCommunityRoute,
   AdminComplaintsRoute: AdminComplaintsRoute,
   AdminMapRoute: AdminMapRoute,
   AdminResidentsRoute: AdminResidentsRoute,
@@ -367,13 +584,35 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface CommunityRouteChildren {
+  CommunityIdRoute: typeof CommunityIdRoute
+  CommunityIndexRoute: typeof CommunityIndexRoute
+}
+
+const CommunityRouteChildren: CommunityRouteChildren = {
+  CommunityIdRoute: CommunityIdRoute,
+  CommunityIndexRoute: CommunityIndexRoute,
+}
+
+const CommunityRouteWithChildren = CommunityRoute._addFileChildren(
+  CommunityRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  ApproachRoute: ApproachRoute,
   AuthRoute: AuthRoute,
+  CommunityRoute: CommunityRouteWithChildren,
+  CompanyRoute: CompanyRoute,
+  ContactRoute: ContactRoute,
+  EquipmentRoute: EquipmentRoute,
+  NewsRoute: NewsRoute,
+  NotificationsRoute: NotificationsRoute,
   PrivacyRoute: PrivacyRoute,
   ReportRoute: ReportRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ServicesRoute: ServicesRoute,
   StaffRoute: StaffRoute,
   UpdatesRoute: UpdatesRoute,
   ReportsIdRoute: ReportsIdRoute,

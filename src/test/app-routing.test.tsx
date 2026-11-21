@@ -17,6 +17,11 @@ describe("App routing", () => {
 
   it.each([
     ["/auth", "/auth"],
+    ["/company", "/company"],
+    ["/services", "/services"],
+    ["/equipment", "/equipment"],
+    ["/approach", "/approach"],
+    ["/contact", "/contact"],
     ["/report", "/report"],
     ["/reports", "/reports/"],
     ["/reports/3f1c2a7e-0000-4000-8000-000000000000", "/reports/$id"],
@@ -28,6 +33,11 @@ describe("App routing", () => {
     ["/admin/residents", "/admin/residents"],
     ["/admin/team", "/admin/team"],
     ["/updates", "/updates"],
+    ["/news", "/news"],
+    ["/community", "/community/"],
+    ["/community/3f1c2a7e-0000-4000-8000-000000000000", "/community/$id"],
+    ["/admin/community", "/admin/community"],
+    ["/notifications", "/notifications"],
     ["/privacy", "/privacy"],
     ["/reset-password", "/reset-password"],
   ])("matches %s to the %s route", (path, routeId) => {

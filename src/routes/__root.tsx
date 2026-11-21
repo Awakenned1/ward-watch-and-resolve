@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { SiteLayout } from "@/components/site-layout";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
+import { APP_NAME } from "@/lib/ward109";
 
 function NotFoundComponent() {
   return (
@@ -81,17 +82,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ward 109 Resolved" },
+      { title: APP_NAME },
       {
         name: "description",
         content:
-          "Escalate and track unresolved municipal faults in Ward 109, City of Johannesburg.",
+          "Municipal fault reporting for every resident, regardless of political affiliation. Currently serving Ward 109, Johannesburg.",
       },
-      { property: "og:title", content: "Ward 109 Resolved" },
+      { property: "og:title", content: APP_NAME },
       {
         property: "og:description",
         content:
-          "Escalate and track unresolved municipal faults in Ward 109, City of Johannesburg.",
+          "Municipal fault reporting for every resident, regardless of political affiliation. Currently serving Ward 109, Johannesburg.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -107,7 +108,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
   }),
   shellComponent: RootShell,

@@ -81,7 +81,7 @@
 }
 
 :root {
-  /* Ward 109 Resolved brand: navy #123B63, teal #008C95, light grey #F8FAFC. */
+  /* Ward Resolve community palette: navy #123B63, teal #008C95, light grey #F8FAFC. */
   --radius: 0.625rem;
   --background: oklch(0.984 0.003 247.9);
   --foreground: oklch(0.208 0.04 265.8);

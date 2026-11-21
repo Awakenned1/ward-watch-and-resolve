@@ -1,4 +1,8 @@
-# Ward Watch And Resolve
+# Ward Resolve
+
+Community fault reporting for every resident, regardless of political affiliation.
+No party membership is required. Reporting currently serves Ward 109, Johannesburg;
+accounts are also open to people who live outside the ward.
 
 Hello 👋
 
@@ -38,7 +42,7 @@ Details:
 
 Regards,
 Charlene Olivia McCord
-Councillor Ward 109 | City of Johannesburg create a system to track for DA Political party. i want a fault login system, they should be able to upload faults , a system where people can login and report faults around the area where DA is in charge
+Councillor Ward 109 | City of Johannesburg
 
 The app runs independently with TanStack Start, React, Tailwind CSS, and Supabase.
 
@@ -80,7 +84,69 @@ Email signup must be enabled in Supabase Auth. Keep email confirmation enabled a
 allow the deployed app's `/auth` and `/reset-password` URLs in Auth redirect settings.
 Staff access is provisioned only for trusted verified email addresses.
 
-## Validation and production
+## Tickets, community and news
+
+Residents can save drafts, submit a fault with a municipal reference, track its
+status under My tickets, and exchange private messages with verified ward staff.
+The notifications bell shows new replies and progress updates. Ticket messages
+refresh every 15 seconds while open; ticket progress refreshes every 30 seconds.
+In-app delivery works independently of email. Outgoing notification email, SMS
+and WhatsApp still require a separate delivery worker/provider.
+
+The Community channel supports public resident blog posts, editing and deletion.
+Only the author's first name is published. Ward staff can hide/restore posts with
+a moderation reason under Ward management → Community posts. Editing a hidden
+post keeps it hidden until staff restore it. Fault records and ticket messages
+never appear in the public community channel.
+
+The News tab combines published staff announcements with attributed publisher
+headlines. After applying migrations, install the hourly Supabase Cron worker:
+
+```sh
+node --env-file=.env.local db/setup-news-automation.mjs
+```
+
+This enables `http` and `pg_cron`, imports the approved Sandton Chronicle RSS feed,
+filters for the Sandton area, and deduplicates article links. Only headlines and
+links are stored. Staff can pause imports and hide headlines under News & updates.
+The worker accepts a fixed HTTPS publisher URL, has timeouts, and cannot be called
+by browser users. Feed success/error status is shown to staff; Cron run history is
+available in the Supabase dashboard. Re-running setup updates the same named job.
+
+```sh
+bun run test:db
+bun run db:types
+```
+
+Database checks use embedded PostgreSQL and cover private ticket conversations,
+public blogs, moderation, news imports and row rules as well as existing workflows.
+
+## Vercel hosting
+
+Import this repository in Vercel. `vercel.json` selects TanStack Start, Bun installs
+the locked dependencies, and Nitro generates Vercel's server function and static
+assets automatically. The project uses Node.js 22. Leave the output directory at
+the framework default; this application needs server rendering.
+The setup follows [Vercel's TanStack Start guide](https://vercel.com/docs/frameworks/full-stack/tanstack-start).
+
+Add these two build environment variables to the Vercel project:
+
+- `VITE_SUPABASE_URL`: your Supabase project URL.
+- `VITE_SUPABASE_PUBLISHABLE_KEY`: your Supabase publishable key.
+
+Redeploy after changing build environment variables. The browser uses only these
+public credentials. Database migrations and the news scheduler run separately in
+Supabase, so Vercel does not need the database password or Supabase secret key.
+
+After the first deployment, open Supabase **Authentication → URL Configuration**.
+Set **Site URL** to the final production origin (Vercel domain or custom domain),
+and add that origin's `/auth` and `/reset-password` URLs to the allowed redirects.
+Configure the actual production domain instead of the earlier Lovable address.
+Add exact preview origins separately if you want to test confirmation/reset there.
+Keep email confirmation enabled and verify email delivery for residents before
+launch. The app already builds confirmation/reset links from its current origin.
+
+## Local production preview
 
 ```sh
 bun run test

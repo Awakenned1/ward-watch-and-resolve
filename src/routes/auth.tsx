@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth, useRoles } from "@/hooks/use-auth";
 import { useBackendReady } from "@/hooks/use-backend-ready";
 import { db, friendlyError } from "@/lib/db";
-import { APP_NAME, TAGLINE, WARD_SUBURBS } from "@/lib/ward109";
+import { ACCESS_STATEMENT, APP_NAME, TAGLINE, WARD_SUBURBS } from "@/lib/ward109";
 
 const searchSchema = z.object({
   // Only same-site paths, so the link cannot bounce users to another site.
@@ -252,6 +252,7 @@ function AuthPage() {
             Register the municipal faults you have logged with the City, track their progress and
             escalate unresolved issues to the Ward 109 Councillor.
           </p>
+          <p className="mt-5 max-w-md font-medium text-teal-200">{ACCESS_STATEMENT}</p>
         </div>
         <ul className="relative space-y-3 text-sm">
           {[
@@ -337,6 +338,12 @@ function AuthPage() {
                 "Enter your email and we'll send you a reset link."
               )}
             </p>
+
+            {mode === "sign-up" && (
+              <p className="mt-5 rounded-lg bg-accent px-4 py-3 text-sm leading-relaxed text-accent-foreground">
+                {ACCESS_STATEMENT} No party membership is required.
+              </p>
+            )}
 
             {backendReady.data === false && (
               <Notice className="mt-5" title="Fault reporting is being set up">

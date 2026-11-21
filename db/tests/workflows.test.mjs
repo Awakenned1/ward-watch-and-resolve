@@ -1029,6 +1029,198 @@ await ok(
   },
   (r) => one(r).blocked,
 );
+console.log("\nTicket conversations, community blogs and neighbourhood news");
+const message = await ok(
+  "resident sends a private ticket message",
+  () =>
+    as(
+      R1,
+      "INSERT INTO public.ticket_messages(complaint_id,author_id,body) VALUES($1,$2,'Please give me an update') RETURNING id,author_role",
+      [C1, R1],
+    ),
+  (r) => one(r).author_role === "resident",
+);
+await ok(
+  "staff replies without changing ticket status",
+  () =>
+    as(
+      ADMIN,
+      "INSERT INTO public.ticket_messages(complaint_id,author_id,body) VALUES($1,$2,'We have followed up with the roads team') RETURNING author_role",
+      [C1, ADMIN],
+    ),
+  (r) => one(r).author_role === "staff",
+);
+await ok(
+  "owner reads both sides of the conversation",
+  () => as(R1, "SELECT id FROM public.ticket_messages WHERE complaint_id=$1", [C1]),
+  (r) => r.rows.length === 2,
+);
+await denied("another resident cannot read the conversation", () =>
+  as(R2, "SELECT id FROM public.ticket_messages WHERE complaint_id=$1", [C1]),
+);
+await denied("municipal liaison cannot read the private ward conversation", () =>
+  as(LIAISON, "SELECT id FROM public.ticket_messages WHERE complaint_id=$1", [C1]),
+);
+await denied("anonymous visitors cannot read messages", () =>
+  as(null, "SELECT * FROM public.ticket_messages"),
+);
+await denied("resident cannot send on another ticket", () =>
+  as(
+    R2,
+    "INSERT INTO public.ticket_messages(complaint_id,author_id,body) VALUES($1,$2,'intrusion')",
+    [C1, R2],
+  ),
+);
+await denied("resident cannot impersonate staff", () =>
+  as(
+    R1,
+    "INSERT INTO public.ticket_messages(complaint_id,author_id,author_role,body) VALUES($1,$2,'staff','fake response')",
+    [C1, R1],
+  ),
+);
+await denied("messages cannot be rewritten", () =>
+  as(R1, "UPDATE public.ticket_messages SET body='edited' WHERE id=$1", [one(message).id]),
+);
+await ok(
+  "staff response creates a private in-app notification",
+  () =>
+    as(
+      R1,
+      "SELECT title,body FROM public.notifications WHERE complaint_id=$1 AND event='ticket_message'",
+      [C1],
+    ),
+  (r) => r.rows.length === 1 && !one(r).body.includes("roads team"),
+);
+await ok(
+  "resident message notifies ward staff",
+  () =>
+    as(
+      ADMIN,
+      "SELECT id FROM public.notifications WHERE complaint_id=$1 AND event='ticket_message'",
+      [C1],
+    ),
+  (r) => r.rows.length === 1,
+);
+const post = await ok(
+  "resident publishes a community blog",
+  () =>
+    as(
+      R1,
+      "INSERT INTO public.community_posts(ward_id,author_id,title,body) VALUES($1,$2,'Neighbourhood cleanup','Join our community cleanup on Saturday morning.') RETURNING *",
+      [ward, R1],
+    ),
+  (r) => one(r).author_name === "Resident" && !one(r).is_hidden,
+);
+const postId = one(post).id;
+await ok(
+  "public visitors can read community blogs",
+  () => as(null, "SELECT title FROM public.community_posts WHERE id=$1", [postId]),
+  (r) => r.rows.length === 1,
+);
+await denied("resident cannot spoof the blog author", () =>
+  as(
+    R2,
+    "INSERT INTO public.community_posts(ward_id,author_id,title,body) VALUES($1,$2,'Spoofed post','This must never be published.')",
+    [ward, R1],
+  ),
+);
+await denied("resident cannot edit another blog", () =>
+  as(R2, "UPDATE public.community_posts SET title='hacked' WHERE id=$1", [postId]),
+);
+await denied("resident cannot moderate a blog", () =>
+  as(R1, "SELECT public.moderate_community_post($1,true,'testing')", [postId]),
+);
+await ok("staff hides a blog with a reason", () =>
+  as(ADMIN, "SELECT public.moderate_community_post($1,true,'Contains private information')", [
+    postId,
+  ]),
+);
+await denied("moderated blog disappears from public feed", () =>
+  as(null, "SELECT * FROM public.community_posts WHERE id=$1", [postId]),
+);
+await ok(
+  "author sees the moderation reason",
+  () => as(R1, "SELECT moderation_reason FROM public.community_posts WHERE id=$1", [postId]),
+  (r) => one(r).moderation_reason === "Contains private information",
+);
+await denied("author cannot unhide their blog directly", () =>
+  as(R1, "UPDATE public.community_posts SET is_hidden=false WHERE id=$1", [postId]),
+);
+await ok(
+  "author edits a hidden blog without un-hiding it",
+  () =>
+    as(
+      R1,
+      "UPDATE public.community_posts SET body='Updated community cleanup information.' WHERE id=$1 RETURNING is_hidden",
+      [postId],
+    ),
+  (r) => one(r).is_hidden,
+);
+await ok("staff restores a corrected blog", () =>
+  as(
+    ADMIN,
+    "SELECT public.moderate_community_post($1,false) FROM public.community_posts WHERE id=$1",
+    [postId],
+  ),
+);
+await denied("another resident cannot delete a blog", () =>
+  as(R2, "DELETE FROM public.community_posts WHERE id=$1", [postId]),
+);
+await ok(
+  "author deletes their blog",
+  () => as(R1, "DELETE FROM public.community_posts WHERE id=$1 RETURNING id", [postId]),
+  (r) => r.rows.length === 1,
+);
+const feedId = one(await admin("SELECT id FROM public.news_feeds LIMIT 1")).id;
+const rss = `<rss><channel><item><title>Woodmead neighbourhood news</title><link>https://www.citizen.co.za/sandton-chronicle/qa-story/</link><pubDate>${new Date().toUTCString()}</pubDate></item><item><title>Unrelated city</title><link>https://example.com/untrusted</link><pubDate>${new Date().toUTCString()}</pubDate></item></channel></rss>`;
+await ok(
+  "worker imports approved neighbourhood headlines",
+  () => admin("SELECT app_private.ingest_neighbourhood_rss($1,$2) n", [feedId, rss]),
+  (r) => one(r).n === 1,
+);
+await ok(
+  "worker deduplicates repeated stories",
+  () => admin("SELECT app_private.ingest_neighbourhood_rss($1,$2) n", [feedId, rss]),
+  (r) => one(r).n === 0,
+);
+await ok(
+  "public can read imported news with source provenance",
+  () =>
+    as(
+      null,
+      "SELECT n.title,f.name FROM public.neighbourhood_news n JOIN public.news_feeds f ON n.feed_id=f.id",
+    ),
+  (r) => r.rows.length === 1 && one(r).name === "Sandton Chronicle",
+);
+await denied("resident cannot execute the private news importer", () =>
+  as(R1, "SELECT app_private.ingest_neighbourhood_rss($1,$2)", [feedId, rss]),
+);
+await denied("resident cannot alter an automated feed", () =>
+  as(R1, "UPDATE public.news_feeds SET enabled=false WHERE id=$1", [feedId]),
+);
+await denied("staff cannot redirect feeds to arbitrary hosts", () =>
+  as(ADMIN, "UPDATE public.news_feeds SET feed_url='https://example.com/' WHERE id=$1", [feedId]),
+);
+await ok(
+  "staff pauses automated imports",
+  () =>
+    as(ADMIN, "UPDATE public.news_feeds SET enabled=false WHERE id=$1 RETURNING enabled", [feedId]),
+  (r) => !one(r).enabled,
+);
+await ok(
+  "paused feed does not import",
+  () => admin("SELECT app_private.ingest_neighbourhood_rss($1,$2) n", [feedId, rss]),
+  (r) => one(r).n === 0,
+);
+await ok(
+  "staff hides imported headline",
+  () => as(ADMIN, "UPDATE public.neighbourhood_news SET is_hidden=true RETURNING id"),
+  (r) => r.rows.length === 1,
+);
+await denied("hidden headline disappears publicly", () =>
+  as(null, "SELECT * FROM public.neighbourhood_news"),
+);
+
 console.log("\nCouncillor team management");
 const GRANT_SQL =
   "INSERT INTO public.role_email_grants (email, role, ward_id, created_by) VALUES ($1, $2, $3, $4) RETURNING id";

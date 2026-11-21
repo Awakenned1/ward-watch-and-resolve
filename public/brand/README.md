@@ -1,10 +1,7 @@
 # Brand files
 
-The active artwork is configured in `src/lib/ward109.ts`:
+Ward Resolve uses a neutral map-pin mark in the site header and `public/favicon.svg`.
+The platform serves residents regardless of political affiliation.
 
-- `da-logo-header.webp`: the header logo.
-- `da-logo-header.png`: the PNG fallback for the same logo.
-- `councillor.webp`: the councillor's portrait.
-
-The two logo formats are intentional browser variants. Keep both when replacing the artwork.
-Use only official artwork supplied by the party or councillor's office.
+`councillor.webp` is the local councillor's informational portrait, configured in
+`src/lib/ward109.ts`. It does not determine account access or eligibility for assistance.

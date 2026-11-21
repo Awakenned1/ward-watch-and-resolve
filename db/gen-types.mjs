@@ -4,6 +4,7 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { format, resolveConfig } from "prettier";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const { PGlite } = await import(
@@ -163,5 +164,9 @@ export type Enums<T extends keyof PublicSchema["Enums"]> = PublicSchema["Enums"]
 `;
 
 const target = join(here, "..", "src", "lib", "db-types.ts");
-writeFileSync(target, out);
+writeFileSync(
+  target,
+  await format(out, { ...(await resolveConfig(target)), parser: "typescript" }),
+);
 console.log(`wrote ${target}: ${tables.size} tables, ${fns.length} functions, ${enums.size} enums`);
+await db.close();

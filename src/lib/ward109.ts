@@ -15,8 +15,9 @@ import type { Enums } from "@/lib/db-types";
 export type ComplaintStatus = Enums<"complaint_status">;
 export type ComplaintPriority = Enums<"complaint_priority">;
 
-export const APP_NAME = "Ward 109 Resolved";
-export const TAGLINE = "Your Ward. Your Voice. Your Resolution.";
+export const APP_NAME = "Ward Resolve";
+export const TAGLINE = "Your community. Your voice. Your resolution.";
+export const ACCESS_STATEMENT = "Open to every resident, regardless of political affiliation.";
 export const WARD_NUMBER = 109;
 export const PRIVACY_NOTICE_VERSION = "2026-11";
 
@@ -30,13 +31,6 @@ export const COUNCILLOR: { name: string; title: string; photo: string | null } =
 // The Ward 109 office's WhatsApp channel (https://whatsapp.com/channel/...). null hides the link.
 export const WHATSAPP_CHANNEL: string | null =
   "https://whatsapp.com/channel/0029Vb93dWDFcowDZg6T0w3R";
-
-// Party logo shown in the header (official artwork in public/brand/).
-export const PARTY_LOGO: { src: string; webp: string; alt: string } | null = {
-  src: "/brand/da-logo-header.png",
-  webp: "/brand/da-logo-header.webp",
-  alt: "Democratic Alliance",
-};
 
 // Official 2026 boundary (Municipal Demarcation Board, WardID 79800109), served as a static file.
 export const WARD_BOUNDARY = {

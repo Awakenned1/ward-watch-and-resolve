@@ -6,18 +6,14 @@ import {
   BarChart3,
   CheckCircle2,
   ClipboardList,
-  FileCheck2,
   Hourglass,
   MapPin,
-  Megaphone,
   Search,
   Smartphone,
 } from "lucide-react";
 
 import heroImage from "@/assets/ward109-neighbourhood.jpg";
-import stepLogImage from "@/assets/steps/step-1-log.webp";
-import stepEscalateImage from "@/assets/steps/step-2-escalate.webp";
-import stepTrackImage from "@/assets/steps/step-3-track.webp";
+import { REPORTING_STEPS as STEPS } from "@/lib/community";
 import { StatCard } from "@/components/app-ui";
 import {
   Accordion,
@@ -32,6 +28,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { db } from "@/lib/db";
 import {
   APP_NAME,
+  ACCESS_STATEMENT,
   CITY_ENTITIES,
   COJ_APP_LINKS,
   COUNCILLOR,
@@ -50,41 +47,21 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Report, track and escalate municipal service delivery issues in Ward 109, Johannesburg.",
+          "Municipal fault reporting for every resident, regardless of political affiliation. Currently serving Ward 109, Johannesburg.",
       },
     ],
   }),
   component: Index,
 });
 
-const STEPS = [
-  {
-    icon: ClipboardList,
-    image: stepLogImage,
-    alt: "Resident on a street reporting a fault on her phone",
-    title: "Log it with the City",
-    body: "Report the fault to the responsible municipal entity and keep the official reference number.",
-  },
-  {
-    icon: Megaphone,
-    image: stepEscalateImage,
-    alt: "Resident typing complaint details on a laptop",
-    title: "Register & escalate",
-    body: "Register it here with your reference number and photos. Still unresolved? Request councillor intervention.",
-  },
-  {
-    icon: FileCheck2,
-    image: stepTrackImage,
-    alt: "Road crew resurfacing a road to fix the fault",
-    title: "Track until resolved",
-    body: "Follow every update with your W109 tracking number, then confirm when the fault is fixed.",
-  },
-];
-
 const FAQ = [
   {
+    q: "Can I use this platform if I do not support a particular political party?",
+    a: "Yes. Ward Resolve is open to every resident, regardless of political affiliation. You do not need party membership to create an account, register a fault or request help. Fault handling is currently configured for Ward 109, Johannesburg.",
+  },
+  {
     q: "Does this website log my fault with the City?",
-    a: "No. Ward 109 Resolved is an independent ward platform, not a City of Johannesburg website. Always log the fault with the responsible municipal entity first (see the reporting channels above), then register it here with the reference number they give you.",
+    a: "No. Ward Resolve is a community fault-reporting platform, not a City of Johannesburg website. Always log the fault with the responsible municipal entity first (see the reporting channels above), then register it here with the reference number they give you.",
   },
   {
     q: "Why do I need a municipal reference number?",
@@ -154,6 +131,7 @@ function Index() {
           <p className="mt-5 max-w-xl text-lg text-white/80">
             Report, track and escalate municipal service delivery issues in Ward 109, Johannesburg.
           </p>
+          <p className="mt-4 max-w-xl text-base font-medium text-teal-200">{ACCESS_STATEMENT}</p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Button asChild size="lg" className="h-12 bg-teal px-6 text-base hover:bg-teal/90">
               <Link to="/report">
@@ -348,10 +326,13 @@ function Index() {
             <p className="text-xs font-semibold tracking-wider text-teal-200 uppercase">
               Your ward councillor
             </p>
-            <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Unresolved? Escalate to me.</h2>
+            <h2 className="mt-2 text-2xl font-bold sm:text-3xl">Get help from your ward office.</h2>
             <p className="mt-3 max-w-xl text-white/80">
               Have your City reference number and the date and time you logged it ready. A picture
               helps if the fault is visible.
+            </p>
+            <p className="mt-3 max-w-xl text-white/80">
+              Every resident can request help, regardless of political affiliation.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg" variant="secondary" className="h-12 px-6">
@@ -360,8 +341,6 @@ function Index() {
               <WhatsAppChannelLink tone="onDark" />
             </div>
             <p className="mt-8 text-sm text-white/80">
-              Regards,
-              <br />
               <span className="font-semibold text-white">{COUNCILLOR.name}</span>
               <br />
               {COUNCILLOR.title}

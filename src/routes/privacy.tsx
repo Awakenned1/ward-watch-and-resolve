@@ -36,6 +36,13 @@ const SECTIONS: { title: string; body: string[] }[] = [
     ],
   },
   {
+    title: "Community posts and ticket conversations",
+    body: [
+      "Community posts are public: your first name, post title, text and publication date can be read by anyone. Do not publish contact details, addresses or private ticket information. You can edit or delete your posts. Ward staff can hide content and give a moderation reason.",
+      "Messages on a fault ticket are private to the ticket owner and authorised ward staff. Replies and progress alerts appear in your in-app notifications. Automated news headlines link to external publishers, whose own privacy policies apply when you open their sites.",
+    ],
+  },
+  {
     title: "How long we keep it",
     body: [
       "Closed complaints are kept for up to 36 months for follow-up and reporting, then reviewed for deletion or anonymisation.",

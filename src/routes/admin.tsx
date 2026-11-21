@@ -30,6 +30,7 @@ type NavItem = {
     | "/admin/complaints"
     | "/admin/map"
     | "/admin/updates"
+    | "/admin/community"
     | "/admin/residents"
     | "/admin/team";
   label: string;
@@ -40,7 +41,8 @@ const NAV: NavItem[] = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard },
   { to: "/admin/complaints", label: "Complaints", icon: ClipboardList },
   { to: "/admin/map", label: "Ward map", icon: MapIcon },
-  { to: "/admin/updates", label: "Ward updates", icon: Megaphone },
+  { to: "/admin/updates", label: "News & updates", icon: Megaphone },
+  { to: "/admin/community", label: "Community posts", icon: Users },
   { to: "/admin/residents", label: "Residents", icon: Users },
   { to: "/admin/team", label: "Team & access", icon: UserCog },
 ];

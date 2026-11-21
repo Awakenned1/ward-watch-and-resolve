@@ -25,6 +25,7 @@ import {
   StatusBadge,
 } from "@/components/app-ui";
 import { PageLoader, RequireAuth } from "@/components/site-layout";
+import { TicketConversation } from "@/components/ticket-conversation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -71,6 +72,7 @@ const COMPLAINT_SELECT =
 function useComplaintData(id: string, isStaff: boolean) {
   const complaint = useQuery({
     queryKey: ["complaints", "detail", id],
+    refetchInterval: 30_000,
     queryFn: async () => {
       // Row rules return nothing unless the viewer owns the complaint, is ward staff or its liaison.
       const { data, error } = await db
@@ -135,11 +137,13 @@ function useComplaintData(id: string, isStaff: boolean) {
     },
     // Signed links last 10 minutes.
     staleTime: 8 * 60 * 1000,
+    refetchInterval: 30_000,
   });
   return { complaint, related };
 }
 
 function ComplaintPage() {
+  const userId = useUserId();
   const { id } = Route.useParams();
   const { submitted } = Route.useSearch();
   const { isStaff } = useRoles();
@@ -224,6 +228,9 @@ function ComplaintPage() {
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0 space-y-6">
+          {(isStaff || c.resident_id === userId) && (
+            <TicketConversation id={c.id} closed={c.status === "closed"} />
+          )}
           <SectionCard title="Complaint details">
             <dl className="grid gap-x-6 gap-y-4 text-sm sm:grid-cols-2">
               <Detail label="Resident">{c.contact_name}</Detail>

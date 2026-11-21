@@ -62,6 +62,7 @@ function MyComplaintsPage() {
 
   const complaints = useQuery({
     queryKey: ["complaints", "mine", userId],
+    refetchInterval: 30_000,
     queryFn: async () => {
       const { data, error } = await db
         .from("complaints")

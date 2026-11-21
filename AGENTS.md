@@ -10,6 +10,9 @@
 
 ## Ward 109 fault reporting
 
+- Keep the platform politically neutral and open to every resident. Do not require or collect
+  party membership, political affiliation, or voting history for account or reporting access.
+
 - Keep report access private through database row rules; only report owners and the verified Ward 109 staff role can view resident records, because reports contain personal contact and address details.
 - Grant the Ward 109 staff role only through trusted verified-email provisioning, never resident-editable metadata or client-side checks.
 - Store optional fault photos in private storage and issue temporary links only after an authenticated access check, because residents' locations may be identifiable.

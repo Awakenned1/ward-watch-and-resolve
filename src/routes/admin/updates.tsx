@@ -7,6 +7,7 @@ import { z } from "zod";
 
 import { EmptyState, Field, NativeSelect, Notice, PageHeader } from "@/components/app-ui";
 import { PageLoader } from "@/components/site-layout";
+import { NewsAutomationAdmin } from "@/components/news-admin";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -151,8 +152,8 @@ function UpdatesAdminPage() {
     <div>
       <PageHeader
         eyebrow="Ward management"
-        title="Ward updates"
-        description="Tell residents about water and electricity interruptions, road closures, meetings and service delivery news. Published updates appear on the public Updates page."
+        title="News & updates"
+        description="Publish ward notices and manage automated neighbourhood headlines. Published updates appear in the News tab."
         actions={
           <Button onClick={() => setEditing("new")}>
             <Plus className="size-4" /> New update
@@ -160,6 +161,9 @@ function UpdatesAdminPage() {
         }
       />
 
+      <div className="mt-6">
+        <NewsAutomationAdmin />
+      </div>
       <div className="mt-6">
         {updates.isPending ? (
           <PageLoader />

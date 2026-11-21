@@ -95,6 +95,53 @@ export type Database = {
         };
         Relationships: [];
       };
+      community_posts: {
+        Row: {
+          id: string;
+          ward_id: string;
+          author_id: string;
+          author_name: string;
+          title: string;
+          body: string;
+          is_hidden: boolean;
+          moderation_reason: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          ward_id: string;
+          author_id: string;
+          author_name?: string;
+          title: string;
+          body: string;
+          is_hidden?: boolean;
+          moderation_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          ward_id?: string;
+          author_id?: string;
+          author_name?: string;
+          title?: string;
+          body?: string;
+          is_hidden?: boolean;
+          moderation_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "community_posts_ward_id_fkey";
+            columns: ["ward_id"];
+            isOneToOne: false;
+            referencedRelation: "wards";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       complaint_assignments: {
         Row: {
           id: string;
@@ -737,6 +784,101 @@ export type Database = {
           },
         ];
       };
+      neighbourhood_news: {
+        Row: {
+          id: string;
+          feed_id: string;
+          ward_id: string;
+          title: string;
+          article_url: string;
+          published_at: string;
+          imported_at: string;
+          is_hidden: boolean;
+        };
+        Insert: {
+          id?: string;
+          feed_id: string;
+          ward_id: string;
+          title: string;
+          article_url: string;
+          published_at: string;
+          imported_at?: string;
+          is_hidden?: boolean;
+        };
+        Update: {
+          id?: string;
+          feed_id?: string;
+          ward_id?: string;
+          title?: string;
+          article_url?: string;
+          published_at?: string;
+          imported_at?: string;
+          is_hidden?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "neighbourhood_news_feed_id_fkey";
+            columns: ["feed_id"];
+            isOneToOne: false;
+            referencedRelation: "news_feeds";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "neighbourhood_news_ward_id_fkey";
+            columns: ["ward_id"];
+            isOneToOne: false;
+            referencedRelation: "wards";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      news_feeds: {
+        Row: {
+          id: string;
+          ward_id: string;
+          name: string;
+          feed_url: string;
+          article_prefix: string;
+          keywords: string[];
+          enabled: boolean;
+          last_checked_at: string | null;
+          last_success_at: string | null;
+          last_error: string | null;
+        };
+        Insert: {
+          id?: string;
+          ward_id: string;
+          name: string;
+          feed_url: string;
+          article_prefix: string;
+          keywords: string[];
+          enabled?: boolean;
+          last_checked_at?: string | null;
+          last_success_at?: string | null;
+          last_error?: string | null;
+        };
+        Update: {
+          id?: string;
+          ward_id?: string;
+          name?: string;
+          feed_url?: string;
+          article_prefix?: string;
+          keywords?: string[];
+          enabled?: boolean;
+          last_checked_at?: string | null;
+          last_success_at?: string | null;
+          last_error?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "news_feeds_ward_id_fkey";
+            columns: ["ward_id"];
+            isOneToOne: false;
+            referencedRelation: "wards";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       notification_preferences: {
         Row: {
           user_id: string;
@@ -1149,6 +1291,41 @@ export type Database = {
         };
         Relationships: [];
       };
+      ticket_messages: {
+        Row: {
+          id: string;
+          complaint_id: string;
+          author_id: string;
+          author_role: string;
+          body: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          complaint_id: string;
+          author_id: string;
+          author_role?: string;
+          body: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          complaint_id?: string;
+          author_id?: string;
+          author_role?: string;
+          body?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "ticket_messages_complaint_id_fkey";
+            columns: ["complaint_id"];
+            isOneToOne: false;
+            referencedRelation: "complaints";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       tracking_counters: {
         Row: {
           ward_id: string;
@@ -1344,6 +1521,10 @@ export type Database = {
       is_super_admin: { Args: never; Returns: boolean };
       is_ward_staff: { Args: { _ward?: string }; Returns: boolean };
       liaison_entity_ids: { Args: never; Returns: string[] };
+      moderate_community_post: {
+        Args: { _id: string; _hidden: boolean; _reason?: string };
+        Returns: undefined;
+      };
       my_roles: {
         Args: never;
         Returns: {

@@ -9,7 +9,8 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     tanstackStart({ server: { entry: "server" } }),
-    nitro({ preset: "node-server" }),
+    // Nitro detects Vercel in its build environment and keeps a Node server for local builds.
+    nitro({ vercel: { functions: { runtime: "nodejs22.x" } } }),
     react(),
   ],
   resolve: {

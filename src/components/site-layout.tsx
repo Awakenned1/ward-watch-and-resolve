@@ -1,36 +1,48 @@
 import { Link, Navigate, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, LogOut, Menu, Plus, X } from "lucide-react";
+import { Bell, Loader2, LogOut, MapPin, Menu, Plus, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
-import { useAuth, useProfile, useRoles } from "@/hooks/use-auth";
+import { useAuth, useRoles } from "@/hooks/use-auth";
 import { WhatsAppChannelLink } from "@/components/whatsapp-channel";
 import { db } from "@/lib/db";
-import { APP_NAME, COUNCILLOR, PARTY_LOGO, TAGLINE } from "@/lib/ward109";
+import { ACCESS_STATEMENT, APP_NAME, COUNCILLOR, TAGLINE } from "@/lib/ward109";
+import { COMMUNITY_PAGES } from "@/lib/community";
+import { useUnreadNotifications } from "@/hooks/use-notifications";
 
 function NavLinks({ onNavigate, mobile }: { onNavigate?: () => void; mobile?: boolean }) {
   const auth = useAuth();
   const { isStaff, isCouncillor } = useRoles();
   const linkClass = mobile
     ? "rounded-md px-3 py-2.5 text-base font-medium text-white/90 hover:bg-white/10"
-    : "rounded-md px-2.5 py-2 text-sm font-medium whitespace-nowrap text-white/85 transition-colors hover:bg-white/10 hover:text-white";
+    : "rounded-md px-2 py-2 text-sm font-medium whitespace-nowrap text-white/85 transition-colors hover:bg-white/10 hover:text-white";
   const activeProps = { className: "bg-white/15 text-white" };
 
   return (
     <>
-      <Link to="/updates" className={linkClass} activeProps={activeProps} onClick={onNavigate}>
-        Updates
+      {(mobile ? COMMUNITY_PAGES : COMMUNITY_PAGES.filter((page) => page.to === "/services")).map(
+        (page) => (
+          <Link
+            key={page.to}
+            to={page.to}
+            className={linkClass}
+            activeProps={activeProps}
+            onClick={onNavigate}
+          >
+            {page.label}
+          </Link>
+        ),
+      )}
+      <Link to="/community" className={linkClass} activeProps={activeProps} onClick={onNavigate}>
+        Community
       </Link>
-      <a href="/#ward-area" className={linkClass} onClick={onNavigate}>
-        Ward information
-      </a>
-      <a href="/#councillor" className={linkClass} onClick={onNavigate}>
-        Your councillor
-      </a>
+      <Link to="/news" className={linkClass} activeProps={activeProps} onClick={onNavigate}>
+        News
+      </Link>
       {auth.status === "signed_in" && (
         <Link to="/reports" className={linkClass} activeProps={activeProps} onClick={onNavigate}>
-          My complaints
+          My tickets
         </Link>
       )}
       {isStaff && (
@@ -44,7 +56,7 @@ function NavLinks({ onNavigate, mobile }: { onNavigate?: () => void; mobile?: bo
 
 function AccountMenu() {
   const auth = useAuth();
-  const profile = useProfile();
+  const unread = useUnreadNotifications();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -62,10 +74,26 @@ function AccountMenu() {
     );
   }
 
-  const name = profile.data?.first_name ?? auth.session.user.email?.split("@")[0] ?? "Account";
   return (
     <div className="flex items-center gap-2">
-      <span className="hidden max-w-40 truncate text-sm text-white/80 2xl:inline">Hi, {name}</span>
+      <Button
+        asChild
+        variant="ghost"
+        size="icon"
+        className="relative text-white hover:bg-white/10 hover:text-white"
+      >
+        <Link
+          to="/notifications"
+          aria-label={`Notifications${unread.data ? `, ${unread.data} unread` : ""}`}
+        >
+          <Bell className="size-5" />
+          {!!unread.data && (
+            <span className="absolute top-0 right-0 min-w-4 rounded-full bg-teal px-1 text-center text-[10px] font-bold text-white">
+              {unread.data > 99 ? "99+" : unread.data}
+            </span>
+          )}
+        </Link>
+      </Button>
       <Button
         variant="ghost"
         size="sm"
@@ -103,27 +131,29 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col bg-background">
       <header className="sticky top-0 z-40 bg-primary text-primary-foreground shadow-[0_8px_24px_-12px_rgb(0_0_0/0.45)]">
-        <div className="mx-auto flex h-[72px] max-w-6xl items-center gap-3 px-4">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-3 px-4">
           <Link
             to="/"
             className="flex shrink-0 items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             aria-label={`${APP_NAME} home`}
             onClick={() => setOpen(false)}
           >
-            {PARTY_LOGO ? (
-              <picture>
-                <source srcSet={PARTY_LOGO.webp} type="image/webp" />
-                <img
-                  src={PARTY_LOGO.src}
-                  alt={PARTY_LOGO.alt}
-                  width={112}
-                  height={56}
-                  className="h-11 w-auto sm:h-14"
-                />
-              </picture>
-            ) : (
-              <span className="font-bold">{APP_NAME}</span>
-            )}
+            <span className="flex items-center gap-2">
+              <span
+                className="grid size-9 shrink-0 place-items-center rounded-xl bg-teal text-white sm:size-10"
+                aria-hidden="true"
+              >
+                <MapPin className="size-5 sm:size-6" />
+              </span>
+              <span>
+                <span className="block text-sm font-bold tracking-tight sm:text-base">
+                  {APP_NAME}
+                </span>
+                <span className="hidden text-[10px] tracking-wide text-white/70 sm:block">
+                  For every resident
+                </span>
+              </span>
+            </span>
           </Link>
           <nav className="ml-4 hidden items-center gap-0.5 xl:ml-6 xl:flex" aria-label="Main">
             <NavLinks />
@@ -175,14 +205,37 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
       <footer className="mt-16 bg-primary-strong text-white/80">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="lg:col-span-2">
+          <div>
             <p className="text-lg font-bold text-white">{APP_NAME}</p>
             <p className="mt-1 text-sm text-teal-200">{TAGLINE}</p>
+            <p className="mt-4 text-sm font-medium text-white">{ACCESS_STATEMENT}</p>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70">
               An independent ward-level platform for tracking and escalating municipal service
               issues in Ward 109. It does not submit faults to City systems: please log every fault
               with the responsible municipal entity first.
             </p>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-white">Explore</p>
+            <ul className="mt-3 space-y-2 text-sm">
+              {COMMUNITY_PAGES.map((page) => (
+                <li key={page.to}>
+                  <Link to={page.to} className="hover:text-white">
+                    {page.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link to="/community" className="hover:text-white">
+                  Community channel
+                </Link>
+              </li>
+              <li>
+                <Link to="/news" className="hover:text-white">
+                  Neighbourhood news
+                </Link>
+              </li>
+            </ul>
           </div>
           <div>
             <p className="text-sm font-semibold text-white">Residents</p>
@@ -203,8 +256,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 </a>
               </li>
               <li>
-                <Link to="/updates" className="hover:text-white">
-                  Ward updates
+                <Link to="/notifications" className="hover:text-white">
+                  Notifications & replies
                 </Link>
               </li>
               <li>
