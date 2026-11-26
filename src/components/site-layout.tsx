@@ -1,4 +1,4 @@
-import { Link, Navigate, useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Bell, Loader2, LogOut, MapPin, Menu, Plus, Smartphone, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -347,12 +347,16 @@ export function PageLoader({ label = "Loading" }: { label?: string }) {
 
 // Route visibility is a convenience; the database rules protect the data itself.
 export function RequireAuth({ children }: { children: ReactNode }) {
-  const auth = useAuth();
-  const location = useLocation();
+  const { status } = useAuth();
+  const { href } = useLocation();
 
-  if (auth.status === "loading") return <PageLoader />;
-  if (auth.status === "signed_out") {
-    return <Navigate to="/auth" search={{ redirect: location.href }} replace />;
-  }
+  useEffect(() => {
+    if (status === "signed_out") {
+      const search = new URLSearchParams({ redirect: href });
+      window.location.replace(`/auth?${search}`);
+    }
+  }, [status, href]);
+
+  if (status !== "signed_in") return <PageLoader />;
   return <>{children}</>;
 }
