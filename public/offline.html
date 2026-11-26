@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en-ZA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#123b63" />
+    <meta name="robots" content="noindex" />
+    <title>You're offline · Ward Resolve</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        color-scheme: light;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        background: #f8fafc;
+        color: #0f172a;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+      main {
+        max-width: 420px;
+        text-align: center;
+      }
+      img {
+        width: 72px;
+        height: 72px;
+      }
+      h1 {
+        margin: 20px 0 8px;
+        font-size: 1.5rem;
+      }
+      p {
+        margin: 0 0 12px;
+        line-height: 1.6;
+        color: #475569;
+      }
+      button {
+        margin-top: 12px;
+        min-height: 44px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 8px;
+        background: #123b63;
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .emergency {
+        margin-top: 24px;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/icons/icon-192.png" alt="" />
+      <h1>You're offline</h1>
+      <p>
+        Ward Resolve needs an internet connection to load your tickets and send reports. Your
+        reports are kept safely in your account, not on this device.
+      </p>
+      <p>Check your mobile data or Wi-Fi, then try again.</p>
+      <button type="button" onclick="location.reload()">Try again</button>
+      <p class="emergency">Emergencies: call 10111 (police) or 112 from a mobile phone.</p>
+    </main>
+  </body>
+</html>

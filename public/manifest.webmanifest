@@ -1,0 +1,45 @@
+{
+  "id": "/",
+  "name": "Ward Resolve",
+  "short_name": "Ward Resolve",
+  "description": "Report municipal faults, track their progress and get help from the Ward 109 office. Open to every resident, regardless of political affiliation.",
+  "lang": "en-ZA",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#123b63",
+  "categories": ["utilities", "government", "lifestyle"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Report a fault",
+      "short_name": "Report",
+      "url": "/report",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "My tickets",
+      "short_name": "Tickets",
+      "url": "/reports",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Neighbourhood news",
+      "short_name": "News",
+      "url": "/news",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

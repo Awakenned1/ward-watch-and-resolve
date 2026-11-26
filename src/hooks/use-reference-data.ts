@@ -41,7 +41,6 @@ export function useReferenceData() {
 }
 
 export type ReferenceData = NonNullable<ReturnType<typeof useReferenceData>["data"]>;
-export type CategoryRef = ReferenceData["categories"][number];
 
 // Builds a usable link for a municipal entity's contact (URL, email or phone).
 export function entityHref(contactType: string, value: string) {

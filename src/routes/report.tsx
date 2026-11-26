@@ -140,7 +140,7 @@ const stepSchemas = [
   }),
   z
     .object({
-      reported: z.enum(["yes", "no"], { errorMap: () => ({ message: "Choose yes or no" }) }),
+      reported: z.enum(["yes", "no"], { error: "Choose yes or no" }),
       municipal_reference_number: z.string().trim(),
       logged_date: z.string(),
       logged_time: z.string(),
@@ -177,9 +177,7 @@ const stepSchemas = [
     }),
   z.object({}),
   z.object({
-    consent: z.literal(true, {
-      errorMap: () => ({ message: "Please confirm and consent to continue" }),
-    }),
+    consent: z.literal(true, { error: "Please confirm and consent to continue" }),
   }),
 ];
 

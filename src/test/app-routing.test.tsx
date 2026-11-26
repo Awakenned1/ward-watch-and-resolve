@@ -39,6 +39,7 @@ describe("App routing", () => {
     ["/admin/community", "/admin/community"],
     ["/notifications", "/notifications"],
     ["/privacy", "/privacy"],
+    ["/app", "/app"],
     ["/reset-password", "/reset-password"],
   ])("matches %s to the %s route", (path, routeId) => {
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });

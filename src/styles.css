@@ -213,3 +213,13 @@
     letter-spacing: -0.015em;
   }
 }
+
+/* Fills the active segment of the "How it works" slideshow progress bar. */
+@keyframes journey-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

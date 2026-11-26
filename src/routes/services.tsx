@@ -22,6 +22,33 @@ function ServicesPage() {
         Keep the official reference number and the date you logged the fault. You will need them
         when you register the issue here.
       </Notice>
+      <Notice tone="warning" title="Emergency: fallen trees">
+        <p>
+          Please note that all service requests relating to emergency fallen trees/branches should
+          be logged with the City of Johannesburg's call centre on{" "}
+          <a
+            href="tel:+27113755555"
+            className="inline-flex min-h-11 items-center font-semibold underline"
+          >
+            (011) 375 5555
+          </a>{" "}
+          /{" "}
+          <a
+            href="tel:+27860562874"
+            className="inline-flex min-h-11 items-center font-semibold underline"
+          >
+            0860 56 2874
+          </a>
+          , via the CSD app (available on the Apple App Store or Google Play Store), or by e-mail to{" "}
+          <a
+            href="mailto:joburgconnect@joburg.org.za"
+            className="inline-flex min-h-11 items-center font-semibold break-all underline"
+          >
+            joburgconnect@joburg.org.za
+          </a>
+          .
+        </p>
+      </Notice>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {Object.entries(CITY_ENTITIES).map(([slug, entity]) => (
           <section

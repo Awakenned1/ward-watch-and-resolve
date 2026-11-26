@@ -1,14 +1,11 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
+# Public information pages may be indexed. Account, ticket and staff pages are private.
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /staff
+Disallow: /report
+Disallow: /reports
+Disallow: /notifications
+Disallow: /auth
+Disallow: /reset-password
+Disallow: /offline.html

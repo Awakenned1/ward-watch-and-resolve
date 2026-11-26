@@ -7,6 +7,7 @@ import {
   ShieldAlert,
   Trash2,
   Trees,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 
@@ -78,6 +79,14 @@ export const CITY_ENTITIES: Record<string, CityEntity> = {
     href: "https://citypower.mobi",
     icon: Lightbulb,
   },
+  eskom: {
+    name: "Eskom",
+    handles:
+      "Power outages in areas Eskom supplies directly, not City Power. Also: MyEskom app, or call 08600 ESKOM.",
+    contact: "0860 037 566 (WhatsApp)",
+    href: "https://alfred.eskom.co.za/chatroom/",
+    icon: Zap,
+  },
   roads: {
     name: "Johannesburg Roads Agency",
     handles: "Potholes, roads, kerbs, stormwater",
@@ -121,10 +130,6 @@ export const CITY_ENTITIES: Record<string, CityEntity> = {
     icon: Globe,
   },
 };
-
-export function entityForCategory(slug: string | null | undefined): CityEntity {
-  return (slug && CITY_ENTITIES[slug]) || CITY_ENTITIES["general"]!;
-}
 
 export const COJ_APP_LINKS = {
   android: "https://bit.ly/4ucfYc4",

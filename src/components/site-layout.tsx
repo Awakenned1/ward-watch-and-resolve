@@ -1,15 +1,22 @@
 import { Link, Navigate, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Bell, Loader2, LogOut, MapPin, Menu, Plus, X } from "lucide-react";
+import { Bell, Loader2, LogOut, MapPin, Menu, Plus, Smartphone, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useAuth, useRoles } from "@/hooks/use-auth";
+import { MobileTabBar } from "@/components/mobile-tab-bar";
 import { WhatsAppChannelLink } from "@/components/whatsapp-channel";
 import { db } from "@/lib/db";
-import { ACCESS_STATEMENT, APP_NAME, COUNCILLOR, TAGLINE } from "@/lib/ward109";
+import { ACCESS_STATEMENT, APP_NAME, COUNCILLOR, TAGLINE, WARD_NUMBER } from "@/lib/ward109";
 import { COMMUNITY_PAGES } from "@/lib/community";
 import { useUnreadNotifications } from "@/hooks/use-notifications";
+import { useInstallState } from "@/hooks/use-install-state";
+
+// "Charlene Olivia McCord" → "Charlene McCord" for the compact header label.
+const councillorShortName = [COUNCILLOR.name.split(" ")[0], COUNCILLOR.name.split(" ").at(-1)].join(
+  " ",
+);
 
 function NavLinks({ onNavigate, mobile }: { onNavigate?: () => void; mobile?: boolean }) {
   const auth = useAuth();
@@ -21,6 +28,15 @@ function NavLinks({ onNavigate, mobile }: { onNavigate?: () => void; mobile?: bo
 
   return (
     <>
+      <Link
+        to="/"
+        className={linkClass}
+        activeProps={activeProps}
+        activeOptions={{ exact: true }}
+        onClick={onNavigate}
+      >
+        Home
+      </Link>
       {(mobile ? COMMUNITY_PAGES : COMMUNITY_PAGES.filter((page) => page.to === "/services")).map(
         (page) => (
           <Link
@@ -115,6 +131,7 @@ function AccountMenu() {
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
+  const install = useInstallState();
 
   useEffect(() => {
     if (!open) return;
@@ -129,33 +146,43 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   }, [open]);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background">
+    <div className="flex min-h-dvh flex-col bg-background pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-0">
       <header className="sticky top-0 z-40 bg-primary text-primary-foreground shadow-[0_8px_24px_-12px_rgb(0_0_0/0.45)]">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-3 px-4">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center gap-2 px-3 sm:gap-3 sm:px-4">
           <Link
             to="/"
-            className="flex shrink-0 items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-            aria-label={`${APP_NAME} home`}
+            className="flex min-w-0 items-center gap-2 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white sm:gap-3"
+            aria-label={`Councillor ${COUNCILLOR.name}, Ward ${WARD_NUMBER} Johannesburg: home`}
+            title={`Councillor ${COUNCILLOR.name}`}
             onClick={() => setOpen(false)}
           >
-            <span className="flex items-center gap-2">
+            {COUNCILLOR.photo ? (
+              <img
+                src={COUNCILLOR.photo}
+                alt=""
+                width={40}
+                height={40}
+                className="size-9 shrink-0 rounded-full object-cover ring-2 ring-teal sm:size-11"
+              />
+            ) : (
               <span
-                className="grid size-9 shrink-0 place-items-center rounded-xl bg-teal text-white sm:size-10"
+                className="grid size-9 shrink-0 place-items-center rounded-xl bg-teal text-white sm:size-11"
                 aria-hidden="true"
               >
                 <MapPin className="size-5 sm:size-6" />
               </span>
-              <span>
-                <span className="block text-sm font-bold tracking-tight sm:text-base">
-                  {APP_NAME}
-                </span>
-                <span className="hidden text-[10px] tracking-wide text-white/70 sm:block">
-                  For every resident
-                </span>
+            )}
+            <span className="min-w-0 leading-tight">
+              <span className="block truncate text-sm font-bold tracking-tight sm:text-base">
+                Cllr {councillorShortName}
+              </span>
+              <span className="block truncate text-[11px] font-semibold tracking-wide text-teal-200 sm:text-xs">
+                Ward {WARD_NUMBER}
+                <span className="hidden sm:inline"> · Johannesburg</span>
               </span>
             </span>
           </Link>
-          <nav className="ml-4 hidden items-center gap-0.5 xl:ml-6 xl:flex" aria-label="Main">
+          <nav className="ml-2 hidden items-center gap-0.5 xl:flex 2xl:ml-4" aria-label="Main">
             <NavLinks />
           </nav>
           <div className="ml-auto flex items-center gap-2">
@@ -173,7 +200,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               variant="ghost"
               size="icon"
               ref={menuButton}
-              className="text-white hover:bg-white/10 hover:text-white md:size-11 xl:hidden"
+              className="hidden text-white hover:bg-white/10 hover:text-white sm:inline-flex md:size-11 xl:hidden"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               aria-controls="mobile-navigation"
@@ -186,7 +213,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         {open && (
           <nav
             id="mobile-navigation"
-            className="flex max-h-[calc(100dvh-72px)] flex-col gap-1 overflow-y-auto border-t border-white/15 px-4 py-3 xl:hidden"
+            className="flex max-h-[calc(100dvh-72px-64px)] flex-col gap-1 overflow-y-auto border-t border-white/15 px-4 py-3 sm:max-h-[calc(100dvh-72px)] xl:hidden"
             aria-label="Mobile"
           >
             <Link
@@ -196,6 +223,16 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             >
               Report a fault
             </Link>
+            {!install.installed && (
+              <Link
+                to="/app"
+                className="flex items-center gap-2 rounded-md border border-white/25 px-3 py-2.5 text-base font-medium text-white hover:bg-white/10"
+                activeProps={{ className: "bg-white/15" }}
+                onClick={() => setOpen(false)}
+              >
+                <Smartphone className="size-4" aria-hidden="true" /> Get the app
+              </Link>
+            )}
             <NavLinks mobile onNavigate={() => setOpen(false)} />
           </nav>
         )}
@@ -266,6 +303,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
                 </a>
               </li>
               <li>
+                <Link to="/app" className="hover:text-white">
+                  Get the mobile app
+                </Link>
+              </li>
+              <li>
                 <Link to="/privacy" className="hover:text-white">
                   Privacy notice
                 </Link>
@@ -289,6 +331,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </p>
         </div>
       </footer>
+
+      <MobileTabBar menuOpen={open} onToggleMenu={() => setOpen((v) => !v)} />
     </div>
   );
 }

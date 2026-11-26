@@ -125,7 +125,10 @@ function ContactPage() {
             10111
           </a>
           , or call{" "}
-          <a href="tel:112" className="inline-flex min-h-11 items-center font-semibold underline">
+          <a
+            href="tel:112"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center font-semibold underline"
+          >
             112
           </a>{" "}
           from a mobile phone.

@@ -121,11 +121,39 @@ bun run db:types
 Database checks use embedded PostgreSQL and cover private ticket conversations,
 public blogs, moderation, news imports and row rules as well as existing workflows.
 
+## Mobile app
+
+Ward Resolve installs as a mobile app straight from the website, with no app store.
+Residents open `/app` (linked as **Get the app** in the mobile menu and footer):
+
+- Android (Chrome, Samsung Internet, Edge): the **Install app** button adds it to the
+  home screen and app drawer.
+- iPhone and iPad: Share → **Add to Home Screen**, with step-by-step instructions on the page.
+- Desktop Chrome and Edge: the install icon in the address bar.
+
+The installed app opens full screen and offers Report, My tickets and News shortcuts on a long press.
+It uses the same account and data as the website, and updates with each deployment.
+
+The pieces are `public/manifest.webmanifest`, the icons in `public/icons/`, `public/sw.js`
+and `public/offline.html`. The service worker only caches fingerprinted build files and
+icons. It never caches pages, server functions or Supabase responses, because those can
+contain residents' personal details. Without a connection it shows the offline page.
+The service worker registers only in production builds, so `bun run dev` is unaffected.
+Installation needs HTTPS, which Vercel provides.
+
+## Dependency security
+
+`package.json` overrides pin patched versions of transitive packages (seroval, zod, js-yaml,
+nanoid, source-map-js and Vite). Run `bun audit` before each release. The remaining
+brace-expansion advisory affects only ESLint's tooling and is not shipped to users.
+
 ## Vercel hosting
 
 Import this repository in Vercel. `vercel.json` selects TanStack Start, Bun installs
 the locked dependencies, and Nitro generates Vercel's server function and static
-assets automatically. The project uses Node.js 22. Leave the output directory at
+assets automatically. It also sets security headers (HSTS, no framing, no MIME
+sniffing, and a permissions policy that allows only location and camera) and serves
+the service worker uncached. The project uses Node.js 22. Leave the output directory at
 the framework default; this application needs server rendering.
 The setup follows [Vercel's TanStack Start guide](https://vercel.com/docs/frameworks/full-stack/tanstack-start).
 

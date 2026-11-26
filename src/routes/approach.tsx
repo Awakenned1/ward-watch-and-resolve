@@ -21,10 +21,10 @@ function ApproachPage() {
             <img
               src={step.image}
               alt={step.alt}
-              width={800}
-              height={500}
+              width={1200}
+              height={750}
               loading="lazy"
-              className="aspect-[16/10] w-full object-cover"
+              className="aspect-[16/10] w-full border-b object-cover object-top"
             />
             <div className="p-5 sm:p-6">
               <p className="text-xs font-semibold tracking-wider text-teal uppercase">

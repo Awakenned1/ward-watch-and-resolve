@@ -3,18 +3,22 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   AlertTriangle,
   ArrowRight,
-  BarChart3,
+  ArrowUpRight,
+  BatteryFull,
   CheckCircle2,
   ClipboardList,
+  ExternalLink,
   Hourglass,
   MapPin,
   Search,
+  Signal,
   Smartphone,
+  Wifi,
 } from "lucide-react";
 
 import heroImage from "@/assets/ward109-neighbourhood.jpg";
-import { REPORTING_STEPS as STEPS } from "@/lib/community";
-import { StatCard } from "@/components/app-ui";
+import heroTicketShot from "@/assets/journey/08-track.webp";
+import { HowItWorks } from "@/components/how-it-works";
 import {
   Accordion,
   AccordionContent,
@@ -23,12 +27,12 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { WardMap } from "@/components/ward-map";
-import { WhatsAppChannelLink } from "@/components/whatsapp-channel";
+import { WhatsAppChannelLink, WhatsAppIcon } from "@/components/whatsapp-channel";
 import { useAuth } from "@/hooks/use-auth";
 import { db } from "@/lib/db";
+import { cn } from "@/lib/utils";
 import {
   APP_NAME,
-  ACCESS_STATEMENT,
   CITY_ENTITIES,
   COJ_APP_LINKS,
   COUNCILLOR,
@@ -36,6 +40,7 @@ import {
   WARD_BOUNDARY,
   WARD_NUMBER,
   WARD_SUBURBS,
+  WHATSAPP_CHANNEL,
 } from "@/lib/ward109";
 
 // The home route ships no og:image, so serve-time hosting can inject the
@@ -117,132 +122,241 @@ function Index() {
         <img
           src={heroImage}
           alt=""
-          className="absolute inset-0 -z-10 size-full object-cover opacity-35"
+          className="absolute inset-0 -z-10 size-full object-cover opacity-50 lg:opacity-30"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary via-primary/90 to-primary/40" />
-        <div className="mx-auto max-w-6xl px-4 py-20 text-white sm:py-28">
-          <p className="text-sm font-semibold tracking-[0.2em] text-teal-200 uppercase">
-            {APP_NAME}
-          </p>
-          <h1 className="mt-4 max-w-3xl text-4xl leading-[1.1] font-extrabold sm:text-6xl">
-            {TAGLINE}
-          </h1>
-          <p className="mt-5 max-w-xl text-lg text-white/80">
-            Report, track and escalate municipal service delivery issues in Ward 109, Johannesburg.
-          </p>
-          <p className="mt-4 max-w-xl text-base font-medium text-teal-200">{ACCESS_STATEMENT}</p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <Button asChild size="lg" className="h-12 bg-teal px-6 text-base hover:bg-teal/90">
-              <Link to="/report">
-                Report an issue <ArrowRight className="size-4" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="h-12 border-white/40 bg-white/10 px-6 text-base text-white hover:bg-white/20 hover:text-white"
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-primary via-primary/85 to-primary/45 sm:bg-gradient-to-r sm:from-primary sm:via-primary/90 sm:to-primary/50" />
+        <div
+          className="pointer-events-none absolute -top-32 -left-24 -z-10 size-96 rounded-full bg-teal/30 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute top-1/4 -right-24 -z-10 hidden size-96 rounded-full bg-teal/20 blur-3xl lg:block"
+          aria-hidden="true"
+        />
+
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-14 pb-20 text-white sm:pt-24 sm:pb-28 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+          <div>
+            <p className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium text-teal-100 backdrop-blur">
+              <MapPin className="size-3.5" /> Ward {WARD_NUMBER} · Johannesburg
+            </p>
+            {/* One heading only: the badge above and the links below stay plain text/chips so
+                this h1 is the single visual anchor of the hero. */}
+            <h1 className="mt-5 text-5xl leading-[1.02] font-extrabold tracking-tight sm:text-6xl lg:text-7xl">
+              Report it.
+              <br />
+              Track it.
+              <br />
+              <span className="text-teal-300">Get it fixed.</span>
+            </h1>
+            <p className="mt-6 max-w-md text-lg text-white/80">
+              Potholes, outages and leaks, followed until they're resolved.
+            </p>
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:flex">
+              <Button
+                asChild
+                size="lg"
+                className="h-12 bg-teal px-6 text-base shadow-lg shadow-teal/30 hover:bg-teal/90"
+              >
+                <Link to="/report">
+                  Report an issue <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-12 border-white/40 bg-white/10 px-6 text-base text-white hover:bg-white/20 hover:text-white"
+              >
+                <Link to={auth.status === "signed_in" ? "/reports" : "/auth"}>
+                  <Search className="size-4" /> Track a ticket
+                </Link>
+              </Button>
+            </div>
+
+            {/* Secondary row, deliberately quieter than the buttons above: the WhatsApp channel
+                is a "join the community" chip (brand colour kept only on the icon, matching the
+                Ward/Johannesburg badges' pill style), not a third call to action. */}
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+              {WHATSAPP_CHANNEL && (
+                <a
+                  href={WHATSAPP_CHANNEL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
+                >
+                  <WhatsAppIcon className="size-4 text-[#25D366]" /> Follow on WhatsApp
+                  <ExternalLink className="size-3 opacity-60" aria-hidden="true" />
+                </a>
+              )}
+              <p className="flex items-center gap-1.5 text-sm text-white/70">
+                <CheckCircle2 className="size-4 text-teal-300" /> Free and open to every resident
+              </p>
+            </div>
+
+            {/* Quick links: plain text, quieter again than the chips above, for visitors who
+                want somewhere else on the page rather than one of the two main actions. */}
+            <nav
+              aria-label="Quick links"
+              className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-white/60"
             >
-              <Link to={auth.status === "signed_in" ? "/reports" : "/auth"}>
-                <Search className="size-4" /> Track my complaint
+              <Link to="/services" className="underline-offset-4 hover:text-white hover:underline">
+                Services
               </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="ghost"
-              className="h-12 px-6 text-base text-white hover:bg-white/10 hover:text-white"
-            >
-              <a href="#ward-dashboard">
-                <BarChart3 className="size-4" /> View ward dashboard
+              <span aria-hidden="true">·</span>
+              <a
+                href="/#municipal-contacts"
+                className="underline-offset-4 hover:text-white hover:underline"
+              >
+                City reporting channels
               </a>
-            </Button>
+              <span aria-hidden="true">·</span>
+              <a href="/#help" className="underline-offset-4 hover:text-white hover:underline">
+                FAQ
+              </a>
+            </nav>
+          </div>
+
+          {/* Product shot: a phone mockup of a real ticket screen, with two floating
+              callouts. Decorative on mobile (where it sits below the fold-worthy CTAs). */}
+          <div className="relative mx-auto hidden w-full max-w-[230px] sm:block lg:mx-0 lg:max-w-[280px]">
+            <div
+              className="absolute inset-0 -z-10 translate-y-6 scale-90 rounded-[3rem] bg-teal/25 blur-2xl"
+              aria-hidden="true"
+            />
+
+            <div className="absolute -top-4 -right-3 z-10 flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white shadow-lg backdrop-blur">
+              <span className="relative flex size-2" aria-hidden="true">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-teal-300 opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-teal-300" />
+              </span>
+              Live status updates
+            </div>
+
+            <div className="overflow-hidden rounded-[2.4rem] border-[10px] border-slate-950 bg-slate-950 shadow-[0_40px_80px_-20px_rgb(0_0_0/0.65)]">
+              <div
+                className="relative flex h-6 items-center justify-between bg-primary px-5 text-[9px] font-semibold text-primary-foreground"
+                aria-hidden="true"
+              >
+                <span>9:41</span>
+                <span className="absolute top-1 left-1/2 h-3.5 w-14 -translate-x-1/2 rounded-full bg-slate-950" />
+                <span className="flex items-center gap-1">
+                  <Signal className="size-2.5" />
+                  <Wifi className="size-2.5" />
+                  <BatteryFull className="size-3" />
+                </span>
+              </div>
+              <div className="aspect-[390/780] w-full overflow-hidden bg-background">
+                <img
+                  src={heroTicketShot}
+                  alt="Ward Resolve ticket page showing a tracking number, status and progress"
+                  width={780}
+                  height={1560}
+                  className="w-full object-cover object-top"
+                  fetchPriority="high"
+                />
+              </div>
+              <div className="flex h-7 items-center justify-center bg-slate-950" aria-hidden="true">
+                <span className="h-1 w-24 rounded-full bg-white/30" />
+              </div>
+            </div>
+
+            <div className="absolute -bottom-4 -left-4 z-10 flex max-w-[170px] items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-xs font-semibold text-foreground shadow-xl sm:-left-6">
+              <CheckCircle2 className="size-4 shrink-0 text-success" aria-hidden="true" />
+              Tracked until resolved
+            </div>
           </div>
         </div>
       </section>
 
       <section
         id="ward-dashboard"
-        className="relative z-10 mx-auto -mt-10 max-w-6xl scroll-mt-24 px-4"
+        className="relative z-10 mx-auto -mt-12 max-w-6xl scroll-mt-24 px-4 sm:-mt-16"
       >
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          <StatCard label="Total complaints" value={fmt(stats.data?.total)} icon={ClipboardList} />
-          <StatCard
-            label="In progress"
-            value={fmt(stats.data?.in_progress)}
-            icon={Hourglass}
-            tone="teal"
-          />
-          <StatCard
-            label="Escalated"
-            value={fmt(stats.data?.escalated)}
-            icon={AlertTriangle}
-            tone="amber"
-          />
-          <StatCard
-            label="Resolved"
-            value={fmt(stats.data?.resolved)}
-            icon={CheckCircle2}
-            tone="green"
-          />
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          {(
+            [
+              {
+                label: "Total complaints",
+                value: fmt(stats.data?.total),
+                icon: ClipboardList,
+                bar: "bg-primary",
+                badge: "bg-secondary text-primary",
+              },
+              {
+                label: "In progress",
+                value: fmt(stats.data?.in_progress),
+                icon: Hourglass,
+                bar: "bg-teal",
+                badge: "bg-accent text-accent-foreground",
+              },
+              {
+                label: "Escalated",
+                value: fmt(stats.data?.escalated),
+                icon: AlertTriangle,
+                bar: "bg-amber-400",
+                badge: "bg-amber-50 text-amber-700",
+              },
+              {
+                label: "Resolved",
+                value: fmt(stats.data?.resolved),
+                icon: CheckCircle2,
+                bar: "bg-emerald-500",
+                badge: "bg-emerald-50 text-emerald-700",
+              },
+            ] as const
+          ).map((t) => (
+            <div
+              key={t.label}
+              className="group relative overflow-hidden rounded-2xl border bg-card p-4 shadow-xl shadow-primary/5 transition-transform hover:-translate-y-1 sm:p-6"
+            >
+              <span className={cn("absolute inset-x-0 top-0 h-1.5", t.bar)} aria-hidden="true" />
+              <span
+                className={cn("grid size-10 place-items-center rounded-xl sm:size-12", t.badge)}
+              >
+                <t.icon className="size-5 sm:size-6" />
+              </span>
+              <p className="mt-4 text-3xl font-extrabold tracking-tight text-foreground tabular-nums sm:text-4xl">
+                {t.value}
+              </p>
+              <p className="mt-1 text-sm font-medium text-muted-foreground">{t.label}</p>
+            </div>
+          ))}
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">
+        <p className="mt-5 text-center text-xs text-muted-foreground sm:mt-6">
           Aggregated ward statistics. To protect residents' privacy, figures below{" "}
           {stats.data?.min_aggregate ?? 5} are not shown, and no personal details are ever
           published.
         </p>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pt-16 pb-14">
-        <p className="text-xs font-semibold tracking-wider text-teal uppercase">How it works</p>
-        <h2 className="mt-1 text-2xl font-bold sm:text-3xl">From fault to resolution</h2>
-        <ol className="mt-8 grid gap-5 md:grid-cols-3">
-          {STEPS.map((step, i) => (
-            <li
-              key={step.title}
-              className="overflow-hidden rounded-xl border bg-card shadow-sm transition-shadow hover:shadow-md"
-            >
-              <div className="relative aspect-[16/10] bg-muted">
-                <img
-                  src={step.image}
-                  alt={step.alt}
-                  width={800}
-                  height={500}
-                  loading="lazy"
-                  decoding="async"
-                  className="size-full object-cover"
-                />
-                <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow">
-                  <step.icon className="size-3.5" />
-                  Step {i + 1}
-                </span>
-              </div>
-              <div className="p-5">
-                <h3 className="font-semibold">{step.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <HowItWorks />
 
-      <section id="ward-area" className="mx-auto max-w-6xl scroll-mt-24 px-4 pb-16">
-        <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-          <WardMap className="h-[360px] shadow-sm sm:h-[440px]" />
+      <section id="ward-area" className="mx-auto max-w-6xl scroll-mt-24 px-4 pt-6 pb-16">
+        <div className="grid gap-8 lg:grid-cols-[1fr_340px] lg:items-start">
+          <div className="relative">
+            <WardMap className="h-[360px] shadow-md sm:h-[460px]" />
+            <div className="pointer-events-none absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground shadow-lg backdrop-blur">
+              <span className="size-2 rounded-full bg-teal" aria-hidden="true" /> Official boundary
+              · {WARD_BOUNDARY.effectiveDate}
+            </div>
+          </div>
           <div>
             <p className="text-xs font-semibold tracking-wider text-teal uppercase">Service area</p>
-            <h2 className="mt-1 flex items-center gap-2 text-2xl font-bold">
+            <h2 className="mt-1 flex items-center gap-2 text-2xl font-bold sm:text-3xl">
               <MapPin className="size-6 text-primary" /> The Ward 109 area
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              The shaded area is the official Ward 109 boundary ({WARD_BOUNDARY.source}, effective{" "}
-              {WARD_BOUNDARY.effectiveDate}).
+              The shaded area above is the official ward boundary, sourced from{" "}
+              {WARD_BOUNDARY.source}.
             </p>
-            <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm lg:grid-cols-1">
+            <ul className="mt-5 flex flex-wrap gap-2">
               {WARD_SUBURBS.map((s) => (
-                <li key={s.name} className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-teal" />
+                <li
+                  key={s.name}
+                  className="inline-flex items-center gap-1.5 rounded-full border bg-secondary px-3 py-1.5 text-sm font-medium text-foreground"
+                >
+                  <span className="size-1.5 rounded-full bg-teal" aria-hidden="true" />
                   {s.name}
                   {s.partial && <span className="text-muted-foreground">(part)</span>}
                 </li>
@@ -257,9 +371,18 @@ function Index() {
       </section>
 
       <section id="municipal-contacts" className="scroll-mt-24 border-y bg-card">
-        <div className="mx-auto max-w-6xl px-4 py-16">
-          <p className="text-xs font-semibold tracking-wider text-teal uppercase">Step 1</p>
-          <h2 className="mt-1 text-2xl font-bold sm:text-3xl">Log your issue with the City</h2>
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+          <div className="flex items-center gap-3">
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-teal text-sm font-bold text-teal-foreground">
+              1
+            </span>
+            <p className="text-xs font-semibold tracking-wider text-teal uppercase">
+              Before you report here
+            </p>
+          </div>
+          <h2 className="mt-3 text-2xl font-bold sm:text-3xl">
+            Log your issue with the City first
+          </h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
             Faults must be logged with the responsible municipal entity first. Faults not logged
             first cannot be tracked or resolved. Keep your reference number.
@@ -271,9 +394,13 @@ function Index() {
                   href={entity.href}
                   target={entity.href.startsWith("http") ? "_blank" : undefined}
                   rel="noreferrer"
-                  className="group flex h-full flex-col rounded-xl border bg-background p-5 transition-all hover:-translate-y-0.5 hover:border-teal hover:bg-card hover:shadow-md"
+                  className="group relative flex h-full flex-col rounded-2xl border bg-background p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-teal hover:shadow-lg"
                 >
-                  <span className="grid size-10 place-items-center rounded-lg bg-secondary text-primary transition-colors group-hover:bg-accent group-hover:text-teal">
+                  <ArrowUpRight
+                    className="absolute top-4 right-4 size-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                  <span className="grid size-11 place-items-center rounded-xl bg-secondary text-primary transition-colors group-hover:bg-teal group-hover:text-teal-foreground">
                     <entity.icon className="size-5" />
                   </span>
                   <span className="mt-4 font-semibold">{entity.name}</span>
@@ -286,7 +413,7 @@ function Index() {
             ))}
           </ul>
 
-          <div className="mt-6 flex flex-col gap-4 rounded-xl border bg-background p-5 sm:flex-row sm:items-center">
+          <div className="mt-6 flex flex-col gap-4 rounded-2xl border bg-background p-5 sm:flex-row sm:items-center">
             <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-secondary text-primary">
               <Smartphone className="size-5" />
             </span>
@@ -317,9 +444,13 @@ function Index() {
       </section>
 
       <section id="councillor" className="mx-auto max-w-6xl scroll-mt-24 px-4 pt-16">
-        <div className="relative grid items-center gap-8 overflow-hidden rounded-2xl bg-primary px-6 py-10 text-primary-foreground sm:px-12 sm:py-12 md:grid-cols-[1fr_auto]">
+        <div className="relative grid items-center gap-8 overflow-hidden rounded-[2rem] bg-primary px-6 py-10 text-primary-foreground sm:px-12 sm:py-12 md:grid-cols-[1fr_auto]">
           <div
             className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-teal/25 blur-3xl"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -bottom-20 -left-16 size-64 rounded-full bg-teal/15 blur-3xl"
             aria-hidden
           />
           <div className="relative">
@@ -366,7 +497,7 @@ function Index() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pt-6">
-        <Accordion type="single" collapsible className="rounded-xl border bg-card px-5 shadow-sm">
+        <Accordion type="single" collapsible className="rounded-2xl border bg-card px-5 shadow-sm">
           <AccordionItem value="role" className="border-b-0">
             <AccordionTrigger className="text-base font-semibold">
               What does a ward councillor do?
@@ -399,7 +530,7 @@ function Index() {
         <Accordion
           type="single"
           collapsible
-          className="mt-8 rounded-xl border bg-card px-5 shadow-sm"
+          className="mt-8 rounded-2xl border bg-card px-5 shadow-sm"
         >
           {FAQ.map((item, i) => (
             <AccordionItem

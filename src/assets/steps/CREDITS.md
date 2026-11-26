@@ -1,10 +1,11 @@
-# Photo credits
+# Step images
 
-All photos are used under the [Unsplash License](https://unsplash.com/license) (free for commercial
-use; attribution appreciated). Cropped to 16:10 and resized to 800×500 WebP.
+Screenshots of the Ward Resolve app itself (report form and ticket page), captured with a
+temporary demo account and sample data that were deleted afterwards. Cropped to 16:10 and
+saved as 1200×750 WebP.
 
-| File | Photographer | Source |
-| --- | --- | --- |
-| step-1-log.webp | Jean Gerber (Port Elizabeth, South Africa) | https://unsplash.com/photos/caLJTqKFZYY |
-| step-2-escalate.webp | Kelly Sikkema | https://unsplash.com/photos/kA50vHmCxbk |
-| step-3-track.webp | Nihar Reddy Jangam | https://unsplash.com/photos/SwU1fGx__Gk |
+| File | Screen |
+| --- | --- |
+| step-1-log.webp | Report form, "Municipal reference" step with "No" selected (log it with the City first) |
+| step-2-escalate.webp | Report form, "Municipal reference" step with the official reference number entered |
+| step-3-track.webp | Ticket page with the W109 tracking number, status and "Request escalation" |
